@@ -1,6 +1,7 @@
 # JIT Technical Overview
 
-The JIT can run and optimize PyTorch programs separate from the Python interpreter. This overview is organized into sections that go over different independent components:
+The JIT can run and optimize PyTorch programs separate from the Python interpreter. This overview is organized into sections that go over different independent components:   
+**JIT可以独立于Python解释器运行和优化PyTorch程序**
 
 1. Core Program Representation -  The JIT executes TorchScript, a subset of python. This section describes how TorchScript programs are represented in the JIT, and serves as the interchange format between components of the JIT.  
 JIT执行TorchScript，一个python子集，本节描述了在JIT中TorchScript programs如何被表示，并且作为JIT组件之间的交换格式
