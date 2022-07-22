@@ -447,6 +447,8 @@ struct C10_EXPORT ivalue::Object final : c10::intrusive_ptr_target {
    * runtime. A "slot" is just an index into that vector, which can be computed
    * statically if you have access to the class type. Use this API if you are
    * writing compiler stuff.
+   * Attributs 被存储为一个简单的向量，这样可以在运行时快速查找。"slot"只是该向量的一个索引，
+   * 如果可以访问类的类型，就可以被静态计算。如果你在写编译器的东西，可以用这个API。
    */
   void setSlot(size_t slot, IValue v) {
     if (slot >= slots_.size()) {

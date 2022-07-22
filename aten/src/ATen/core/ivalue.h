@@ -70,17 +70,22 @@ struct PyObjectHolder;
 // they are marked `@private`, which hides them on the doxygen documentation for
 // this page.
 
-
 /// IValue (Interpreter Value) is a tagged union over the types supported by the
 /// TorchScript interpreter. IValues contain their values as an `IValue::Payload`,
 /// which holds primitive types (`int64_t`, `bool`, `double`, `Device`), as
 /// values and all other types as a `c10::intrusive_ptr`.
-///
+/// IValue（Interpreter Value）是TorchScript解释器支持的类型上的标签union，IVaule包含它们的值
+/// 作为`IValue::Payload`，它包含原始类型 (`int64_t`, `bool`, `double`, `Device`)，作为值和
+/// 所有其它类型作为`c10::intrusive_ptr`。
+
 /// IValues are used as inputs to and outputs from the TorchScript interpreter.
 /// To retrieve the value contained within an IValue, use the `.toX()` methods,
 /// where `X` is the type you are trying to get. Note that neither the `.toX()`
 /// methods nor the templated `.to<T>` functions do any kind of casting, they
-/// only unwrap the contained value. For example:
+/// only unwrap the contained value. For example:  
+/// IValues 作为TorchScript解释器的输入和输出，要检索IValue包含的值，用`.toX()`方法，
+/// 其中`X`是要尝试获取的类型。注意`.toX()`和 `.to<T>` 函数不会做任意类型的转换，它们只是解开包含的值。
+/// 例如：
 ///
 /// \rst
 /// .. code-block:: cpp
