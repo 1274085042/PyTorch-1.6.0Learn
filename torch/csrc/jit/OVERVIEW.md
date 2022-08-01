@@ -176,7 +176,7 @@ Double是类型注释
 `%z` 和 `%w` `Value`作为输入，返回类型为 `T1` 和 `T2`的输出(`%x`, `%y`)   
 
 Finally, nodes can have extra pieces of information assigned to them, which are called _attributes_. You can see that it's used in the `prim::Constant` node, which returns the `value` attribute when it's called. There's a fixed list of types you can attach:  
-节点有额外的信息，称为_attributes_，你可以看到它用在`prim::Constant` 节点，当它调用时返回`Value`属性，你可以附加一个固定的类型列表
+节点有额外的信息，称为_attributes_，你可以看到它用在`prim::Constant` 节点，当它调用时返回`value`属性，你可以附加一个固定的类型列表
 
 - `int64_t`
 - `double`
@@ -192,7 +192,7 @@ Graphs在JIT中是single-static assignment form（单静态分配方式），每
 Blocks、Nodes和Values是_owned_，并且出现在单个图表中。这是由API
 中的断言强制的。创建和删除Block、Node和Value对象通过Graph对象方法（比如`Graph::create`,  `Node::addOutput`,`Node::addBlock`）。这个API还强制执行某些一致性属性。比如， `Node::destroy` 删除一个节点，只有该节点产生的Values不再使用，这个调用才是有效的，这可以由其他函数像`Value::replaceAllUsesWith`来完成
 
-Because Graph owns all its Nodes, Values, and Blocks, these values are always passed around by raw pointer. Generally developers should not write code that holds Value, Node, or Block objects indefinitely without also holding a shared_ptr to their owning Graph.
+Because Graph owns all its Nodes, Values, and Blocks, these values are always passed around by raw pointer. Generally developers should not write code that holds Value, Node, or Block objects indefinitely without also holding a shared_ptr to their owning Graph.  
 图拥有Nodes、Values和Blocks，这些值通过raw pointer传递，如果没有shared_ptr指向Graph，通常开发者不应该写无限期保存Value、Node和Block的代码
 
 ## Node ##
