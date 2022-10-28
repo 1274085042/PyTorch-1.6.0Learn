@@ -422,7 +422,7 @@ Value objects have methods on them to from the Value to its definition (`v.node(
 Vlaue对象具有从Value到其定义以及`v.uses()`的方法，它是一个节点列表，其输入列表包含value。当更改`v`的使用方式方式时，迭代`v.uses()`要小心，因为每一次对`v`的更改，都将会使`v.uses()`的迭代器失效。
 
 Values are abstract representation of data in the program. When executing, the actual tensors, list, tuples, etc. are stored in IValues (_interpreter_ values), which are tagged unions of all possible values in TorchScript. In retrospect the name Value is a bit confusing because it seems like it should be the tagged union, but it originally came from analogy to `llvm::Value`, which serves the same purpose as `jit::Value`.    
-在程序中，Values是数据的抽象表示。当执行时，**实际的tesors list tuples等存储在IValues（中间values），在TorchScript中它是所有可能值的便签union**。回想起来Value的名字有点迷惑性，它看起来应该是标签union，它的名字来源于`llvm::Value`，和`jit::Value`具有相同的用途。
+在程序中，Values是数据的抽象表示。当执行时，**实际的tesors list tuples等存储在IValues（解释器values），在TorchScript中它是所有可能值的便签union**。回想起来Value的名字有点迷惑性，它看起来应该是标签union，它的名字来源于`llvm::Value`，和`jit::Value`具有相同的用途。
 
 ## Type ##
 
