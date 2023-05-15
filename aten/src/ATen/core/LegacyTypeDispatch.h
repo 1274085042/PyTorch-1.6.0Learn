@@ -20,6 +20,7 @@ namespace at {
 // What exactly does AutoNonVariableType do?  The short answer is, it causes
 // dispatches on ATen functions to go to the non-variable implementation,
 // bypassing autograd handling (and also profiling and tracing).
+// AutoNonVariableType究竟做了什么？绕过autograd的处理
 //
 // To understand why this guard exists, it's helpful to understand the history
 // behind how Variable was implemented.  Previously, Variables were implemented

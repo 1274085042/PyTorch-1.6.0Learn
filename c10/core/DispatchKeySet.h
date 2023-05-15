@@ -11,6 +11,8 @@ namespace c10 {
 // tensor type ids, e.g., a Variable tensor can also be a CPU tensor; the
 // DispatchKeySet specifies what type ids apply.  The internal representation is
 // as a 64-bit bit set (this means only 64 tensor type ids are supported).
+// DispatchKey集合表示，一个tensor可以有多个tensor类型id，例如：Variable tensor也可以是
+// 一个CPU tensor，DispatchKey是一个64位的bit set
 //
 // Note that DispatchKeys are ordered; thus, we can ask questions like "what is
 // the highest priority DispatchKey in the set"?  (The set itself is not
@@ -21,7 +23,8 @@ namespace c10 {
 // singletons.  In the near future, this set will represent variable? + tensor
 // type id.  In the far future, it will be requires grad? + profiling? +
 // tracing? + lazy? + tensor type id.
-//
+//tensors are always singletons. 张量总是单例
+
 // (The difference between variable and requires grad, is that
 // there are currently three states a tensor can be:
 //  1. Not a variable
@@ -29,6 +32,11 @@ namespace c10 {
 //  3. Variable with requires_grad=True
 // Eventually, we want to kill state (1), and only dispatch to autograd
 // handling code if one of the inputs requires grad.)
+// variable和requires grad之间的区别是张量可以有三种状态：
+// 1. 不是variable
+// 2. requires_grad=False的variable
+// 3. requires_grad=True的variable
+// 最终，我们想要终止状态(1)，如果输入中的一个需要grad分派到autograd处理代码
 //
 // An undefined tensor is one with an empty tensor type set.
 class DispatchKeySet final {
@@ -101,6 +109,7 @@ public:
   // is the largest in the DispatchKey enum).  Intuitively, this
   // type id is the one that should handle dispatch (assuming there
   // aren't any further exclusions or inclusions).
+  // 返回集合中具有最高优先级的类型ID（即DispatchKey枚举中最大的）
   DispatchKey highestPriorityTypeId() const {
     // TODO: If I put Undefined as entry 64 and then adjust the
     // singleton constructor to shift from the right, we can get rid of the

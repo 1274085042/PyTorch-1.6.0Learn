@@ -77,6 +77,11 @@ private:
  * consider the operator add(Tensor, Tensor), the dispatch table for this
  * operator may contain implementations for various dynamic tensor types, such
  * as CPU, CUDA, etc.
+ * 
+ * 每个算子的dispatch table
+ * 给定由FunctionSchema指定的算子，该类提供了算子各种内核的dispatch table.
+ * 例如，算子add(Tensor, Tensor)，该算子的dispatch table包含了tensor各种类型的实现，
+ * 像CPU、CUDA等。
  */
 class DispatchTable final {
  public:

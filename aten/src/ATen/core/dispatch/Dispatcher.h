@@ -38,6 +38,8 @@ class SchemaRegistrationHandleRAII;
  * Top-level dispatch interface for dispatching via the dynamic dispatcher.
  * Most end users shouldn't use this directly; if you're trying to register
  * ops look in op_registration
+ * 动态dispatcher机制的顶层接口
+ * 大多数用户不应该直接使用它；如果你想注册ops，请查看op_registration
  */
 class CAFFE2_API Dispatcher final {
 private:
@@ -57,6 +59,11 @@ private:
     // must not actually delete the handle as there are other outstanding RAII
     // destructors which will try to destruct and they had better still have a
     // working operator handle in this case
+    // 
+    // def_count反映了def()注册（在新版本中，它应该是1，在老版本中可能会多次注册schema，这将会增加def_count）
+    // def_and_impl_count反映了def()和impl()注册的数量，当最后一个def()取消注册，必须立即调用Deregistered listeners，
+    // 但是我们不能实际删除handle，因为有其它outstanding RAII析构函数尝试析够，
+    // 在这种情况下，最好有一个有效的操作符句柄
     size_t def_count = 0;
     size_t def_and_impl_count = 0;
   };
@@ -91,6 +98,9 @@ public:
    * generating std::string constructor calls at the call site), and (2)
    * it raises an exception if the operator is not found (so we skip
    * generating exception raising code at the call site)
+   * findSchema的变体，可以减少在调用站点产生的代码
+   * 第一个参数时const char* 指针，而不是OperatorName
+   * 如果算子未找到，则抛出异常
    *
    * Irritatingly, we still have to generate the handful of instructions
    * for dealing with an exception being thrown during static initialization
@@ -225,6 +235,7 @@ private:
   // Set of backends which have specified they do NOT want fallthrough behavior
   // (we store the inverse because it avoids a negation when we use this for
   // masking)
+  // 指定了一组不希望fallthrough的后端
   DispatchKeySet backendsWithoutFallthrough_;
   std::unique_ptr<detail::RegistrationListenerList> listeners_;
   std::mutex mutex_;
@@ -232,8 +243,10 @@ private:
 
 /**
  * This is a handle to an operator schema registered with the dispatcher.
+ * 算子schema注册的句柄
  * This handle can be used to register kernels with the dispatcher or
  * to lookup a kernel for a certain set of arguments.
+ * 该句柄用于向dispatcher注册kernel或者为一组特定的参数查找内核
  */
 class CAFFE2_API OperatorHandle {
 public:
@@ -290,6 +303,8 @@ private:
  * It holds the same information as an OperatorHandle, but it is templated
  * on the operator arguments and allows calling the operator in an
  * unboxed way.
+ * 算子schema注册的handle，它包含与OperatorHandle相同的信息，但它是算子参数上模板化的，
+ * 并允许以unboxed的方式调用算子。
  */
 template<class FuncType>
 class TypedOperatorHandle final {

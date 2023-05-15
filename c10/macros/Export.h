@@ -2,6 +2,7 @@
 #define C10_MACROS_EXPORT_H_
 
 /* Header file to define the common scaffolding for exported symbols.
+ * 定义导出符号的通用脚手架
  *
  * Export is by itself a quite tricky situation to deal with, and if you are
  * hitting this file, make sure you start with the background here:
@@ -10,6 +11,7 @@
  * https://docs.microsoft.com/en-us/cpp/cpp/dllexport-dllimport?view=vs-2017
  *
  * Do NOT include this file directly. Instead, use c10/macros/Macros.h
+ * 不要直接包含该文件，要使用c10/macros/Macros.h
  */
 
 // You do not need to edit this part of file unless you are changing the core

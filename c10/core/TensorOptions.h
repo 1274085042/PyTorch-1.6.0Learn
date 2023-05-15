@@ -20,6 +20,7 @@ namespace c10 {
 /// A class to encapsulate construction axes of an Tensor.  TensorOptions was
 /// designed to support the Python style API for specifying construction options
 /// on factory functions, e.g.,
+/// 封装张量构造轴的类。TensorOptions设计为支持Python风格的API，在工厂函数上指定构造选项，如：
 ///
 ///     torch.zeros(2, 3, dtype=torch.int32)
 ///
@@ -28,11 +29,15 @@ namespace c10 {
 /// builder class which can be used to construct this "dictionary" of keyword
 /// arguments: functions which support TensorOptions conventionally take this
 /// argument optionally as their last argument.
+/// 因为C++不支持关键字参数，因此必须用其它方法指定类似的关键字参数。TenorOptions用来构造关键
+/// 字参数的字典：支持TensorOptions的函数通常将该参数可选的作为最后一个参数
 ///
 /// WARNING: In PyTorch, there are `torch::` variants of factory functions,
 /// e.g., torch::zeros for at::zeros.  These return Variables (while the
 /// stock ATen functions return plain Tensors).  If you mix these functions
 /// up, you WILL BE SAD.
+/// 在PyTorch中，有一些工厂函数的变体`torch::`，例torch::zeros代表at::zeros，它们返回Variables
+/// (而ATen函数返回普通Tensor)
 ///
 /// Rather than use the constructor of this class directly, you should prefer to
 /// use the constructor functions, and then chain setter methods on top of them.
@@ -42,10 +47,13 @@ namespace c10 {
 ///
 /// Additionally, anywhere a TensorOptions is expected, you can directly
 /// pass at::kCUDA / at::kInt, and it will implicitly convert to a TensorOptions.
+/// 此外，任何需要TensorOptions的地方，你都可以直接传递at::kCUDA / at::kInt，它将
+/// 隐式的转换为TensorOptions
 ///
 /// Here are some recommended ways to create a 2x2 tensor of zeros
 /// with certain properties.  These all *implicitly* make use of
 /// TensorOptions, even if they don't mention the class explicitly:
+/// 这里有一些推荐的方式创建具有某些属性的2*2张量，它们都是隐式的使用了TensorOptions
 ///
 ///     at::zeros({2,2}, at::kCUDA);
 ///     at::zeros({2,2}, at::kLong);
@@ -62,12 +70,18 @@ namespace c10 {
 /// tensors in many places both in C++ internal and API, e.g., tensor factory
 /// methods like `at::empty({10}, options)`, tensor conversions like
 /// `tensor.to(...)`, etc.
+/// TensorOptions像是一个字典，其中的条目来自集合{requires_grad, device, dtype, layout}，
+/// 每个条目都是可选的。它用于在C++内部和API中指定张量的属性，例如，张量的工厂方法像`at::empty({10}, options)`，
+/// 张量的转换`tensor.to(...)`
 ///
 /// To provide a simple API that is consistent with Python, where one can do
 /// `torch.empty(sizes, X)` with `X` being a `torch.device`, `torch.dtype`, or a
 /// `torch.layout`, we want TensorOptions to be implicitly convertible from
 /// `ScalarType dtype`, `Layout layout` and `Device device`. Therefore, we have
 /// three implicit constructors from each of these three types.
+/// 提供一个和Python一致的简单API，可以执行`torch.empty(sizes, X)`，其中‘X’可以是`torch.device`、
+/// `torch.dtype`或者`torch.layout`，我们希望TensorOptions可以从`ScalarType dtype`、
+/// `Layout layout`和`Device device`隐式转换，因此这三种类型的每一种都有一个隐式构造函数
 ///
 /// This is sufficient for `ScalarType` and `Layout` as they are simple Enum
 /// classes. However, `Device` is an ordinary class with implicit constructors
@@ -78,6 +92,11 @@ namespace c10 {
 /// `at::empty({10}, {kCUDA, 1})` and `tensor.to(kCUDA)`, we need to make sure
 /// that `TensorOptions` is implicitly constructible with any argments that a
 /// `Device` can constructed from. So we have,
+///  对于`ScalarType`和`Layout`是足够的，因为它们是简单的枚举类，而`Device`是一个带有隐式
+/// 构造函数的`Device(DeviceType, DeviceIndex = -1)`和`Device(std::string)`的普通类，
+/// 其中字符串和`torch.device`对象是等价的（例如："cuda:1"可以传递到接受`torch.device("cuda:1")`
+/// 的任何地方），为了支持`at::empty({10}, {kCUDA, 1})`和`tensor.to(kCUDA)`，我们需要确保
+/// 来自`Device`任何构造参数都可以隐式的构造`TensorOptions`
 ///
 ///    /* implicit */ TensorOptions(T&& device) : TensorOptions() {
 ///      this->set_device(device);
@@ -93,11 +112,13 @@ namespace c10 {
 /// Compiler will compain about ambiguity between the copy constructor and the
 /// `Device` constructor because `{kCUDA, 1}` can be converted to both a
 /// `TensorOption` and a `Device`.
-///
+/// 但是这样做会有问题，例如`TensorOptions({kCUDA, 1})`，编译器将报出歧义的错误，因为`{kCUDA, 1}`
+/// 可以同时转换为`TensorOption` 和 `Device`，所以出现TensorOption拷贝构造函数和Device构造函数
+/// 之间的歧义
+/// 
 /// To get around this, we templatize the `Device` constructor. Since overload
 /// resolution is done before template resolution, our problem is solved.
-
-
+/// 为了解决这个问题，我们将`Device`构造函数模板化，因为overload是在模板解析之前完成的
 struct C10_API TensorOptions {
   TensorOptions()
     : requires_grad_(false)

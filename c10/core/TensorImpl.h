@@ -1661,6 +1661,7 @@ protected:
   // not anymore!)
   //
   // INVARIANT: named_tensor_meta_ != nullptr  <==>  key_set_.has(DispatchKey::Named)
+  // 描述tensor的DispatchKeys set
   DispatchKeySet key_set_;
 
   // You get to have eight byte-size fields here, before you

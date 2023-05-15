@@ -2,7 +2,8 @@ ATen "native" functions are the modern mechanism for adding operators and
 functions to ATen (they are "native" in contrast to legacy functions, which are bound
 via TH/THC cwrap metadata).  Native functions
 are declared in `native_functions.yaml` and have implementations defined
-in one of the `cpp` files in this directory.
+in one of the `cpp` files in this directory.  
+ATen "native"函数以更现代的机制向ATen添加函数和算子，Native函数在`native_functions.yaml`中声明，在此目录中的一个 `cpp`中定义实现。
 
 Like all ATen methods/functions, native functions are made available
 from both ATen's C++ and Python APIs.  In C++, they are made available
@@ -13,9 +14,13 @@ methods on `Variable` or as functions on `torch._C._FunctionBase`
 a more user-facing module.)  At the moment, only
 functions which ingest `Variable` are made available; to use a function
 with non-differentiable tensors, wrap your tensors with `Variable` before
-passing them in.
+passing them in.  
+像所有的ATen方法/函数一样，ATen的C++ API和Python API都提供native函数。
+在C++中，它们可以作为Tensor(`t.mymeth()`)上的方法或者ATen命名空间 (`at::myfunc()`)中的函数使用。在PyTorch，它们可以作为Variable上的方法或者
+torch._C._FunctionBase上的函数使用（在一个更面向用户的模块中，用户有责任重新导出这些函数）。目前只有Variable的函数是可用的；要使用具有不可微分张量的函数，在传递张量之前，使用Variable封装你的张量。
 
-The rest of this document describes how to implement an ATen function.
+The rest of this document describes how to implement an ATen function.  
+文档的其余部分描述了如何实现ATen功能。
 
 ## Registering a function in `native_functions.yaml`
 
@@ -214,7 +219,7 @@ are appropriate for "core" Tensor operations (e.g., add, sub, etc.), but not for
 more complicated neural network layers (e.g., `conv2d`) and internal functions
 designed specifically for binding (e.g., `cudnn_convolution`).
 
-As we progress along our schema unification of the `func` schema with the JIT
+As we progress along our z unification of the `func` schema with the JIT
 signature schema, we must introduce features that allow us to increase compliance.
 One of these features are Tensor annotations. As of now we use naming conventions
 to indicate whether an argument of a function is going to be mutated and returned.

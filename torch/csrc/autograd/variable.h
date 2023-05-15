@@ -480,6 +480,8 @@ inline Variable make_variable_non_differentiable_view(
 /// set only for leaves, and determines whether the `Variable` will accumulate
 /// gradients. NOTE: `data` must *not* be a `Variable` already. Its dynamic
 /// type *must* be `Tensor`.
+/// 从给定的Tensor创建一个Variable，拷贝它的底层TensorImpl，requires_grad应该只为leaves设置，
+/// 并确定Variable是否累积梯度。
 ///
 /// TODO: Eliminate this function as much as possible, as it can be expressed
 /// more clearly as detach() or a no-op in most call sites (especially when

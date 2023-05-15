@@ -15,6 +15,7 @@ namespace impl {
 // Some keys are ALWAYS considered for inclusion by default, so they are
 // included in the set here.  (const appears to be sufficient for
 // always_included to get inlined, constexpr not necessary)
+// 某些key总是默认被考虑的
 const DispatchKeySet always_included{DispatchKey::Autograd, DispatchKey::BackendSelect};
 
 // Take a DispatchKeySet for a Tensor and determine what the actual dispatch
@@ -23,6 +24,8 @@ const DispatchKeySet always_included{DispatchKey::Autograd, DispatchKey::Backend
 //
 // Unlike Tensor::key_set(), the value of this on a tensor can change depending
 // on TLS.
+// 从张量取一个DispatchKeySet，并决定实际应该派发的DispatchKey应该是哪一个，同时考虑TLS，并跳过
+// 失败的后端
 static inline DispatchKey dispatchTypeId(
     DispatchKeySet ks,
     // The key mask lets us eliminate (by zero entries) keys which should not
@@ -91,6 +94,7 @@ namespace detail {
 /**
  * An instance of DispatchKeyExtractor knows how to get a dispatch key given
  * a list of arguments for an operator call.
+ * DispatchKeyExtractor的实例知道如何通过算子的参数列表获得dispatch key
  *
  * The instance is specific for a certain operator as:
  *  - In boxed dispatch, different operators have different ways to extract
