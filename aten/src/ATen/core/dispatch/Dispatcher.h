@@ -235,7 +235,7 @@ private:
   // Set of backends which have specified they do NOT want fallthrough behavior
   // (we store the inverse because it avoids a negation when we use this for
   // masking)
-  // 指定了一组不希望fallthrough的后端
+  // 指定了一组不希望fallthrough行为的后端set
   DispatchKeySet backendsWithoutFallthrough_;
   std::unique_ptr<detail::RegistrationListenerList> listeners_;
   std::mutex mutex_;

@@ -188,6 +188,7 @@ private:
         ((backendsWithoutFallthrough | operatorHasKernelForBackend_) - operatorHasFallthroughForBackend_)
       // Regardless of fallthrough behavior, only accept keys which are eligible
       // for dispatch, as requested by the user
+      // 不管fallthrough行为如何，只接受用户请求的符合dispatch条件的key
       & eligibleKeys);
   }
 
